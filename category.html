@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Kategori</title>
+
+<style>
+body{font-family:Arial;background:#fff5f8;margin:0}
+.top{background:#ff2e88;color:#fff;padding:15px;text-align:center;font-weight:bold}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+padding:20px;
+max-width:1200px;
+margin:auto;
+}
+
+.card{
+background:#fff;
+border-radius:12px;
+padding:15px;
+text-align:center;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+.card img{
+width:100%;
+height:180px;
+object-fit:contain;
+}
+
+button{
+background:#ff2e88;
+color:#fff;
+border:none;
+padding:10px 20px;
+border-radius:20px;
+margin-top:10px;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="top">Pınar Oto Aksesuar</div>
+<h2 style="text-align:center">Filtre Sonuçları</h2>
+
+<div id="urunler" class="grid"></div>
+
+<script>
+let brand=(localStorage.getItem("fBrand")||"").toLowerCase();
+let model=(localStorage.getItem("fModel")||"").toLowerCase();
+let year =(localStorage.getItem("fYear") ||"").toLowerCase();
+
+fetch("products.json")
+.then(r=>r.json())
+.then(data=>{
+
+let sonuc=data.filter(p=>{
+let text=(p.ad+" "+(p.aciklama||"")).toLowerCase();
+
+if(brand && !text.includes(brand)) return false;
+if(model && !text.includes(model)) return false;
+if(year && !text.includes(year)) return false;
+
+return true;
+});
+
+let alan=document.getElementById("urunler");
+alan.innerHTML="";
+
+if(sonuc.length==0){
+alan.innerHTML="<h2>Bu araca uygun ürün bulunamadı</h2>";
+return;
+}
+
+sonuc.forEach(p=>{
+alan.innerHTML+=`
+<div class="card">
+<img src="${p.resim}">
+<h3>${p.ad}</h3>
+<p>${p.fiyat} TL</p>
+<button onclick="location.href='urun.html?id=${p.id}'">İncele</button>
+</div>
+`;
+});
+
+});
+</script>
+
+</body>
+</html>

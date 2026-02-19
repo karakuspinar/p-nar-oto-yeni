@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sepet</title>
+<style>
+body{font-family:Arial;padding:40px}
+.item{border-bottom:1px solid #ddd;padding:10px}
+button{padding:10px;background:#ff2e88;color:white;border:none}
+</style>
+</head>
+
+<body>
+
+<h2>Sepet</h2>
+
+<div id="cart"></div>
+
+<h3 id="total"></h3>
+
+<button onclick="whatsapp()">WhatsApp ile Sipariş</button>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")||"[]");
+
+let html="";
+let toplam=0;
+
+cart.forEach(u=>{
+html += `<div class="item">${u.ad} - ${u.adet} adet - ${u.fiyat} TL</div>`;
+toplam += u.fiyat * u.adet;
+});
+
+document.getElementById("cart").innerHTML = html;
+document.getElementById("total").innerText = "Toplam: "+toplam+" TL";
+
+function whatsapp(){
+
+let mesaj="Sipariş:\\n";
+
+cart.forEach(u=>{
+mesaj += u.ad+" x"+u.adet+"\\n";
+});
+
+mesaj += "Toplam: "+toplam+" TL";
+
+window.open("https://wa.me/905531785602?text="+encodeURIComponent(mesaj));
+
+}
+</script>
+
+</body>
+</html>

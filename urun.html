@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Ürün Detay</title>
+
+<style>
+body{
+font-family:Arial;
+background:#fff5f8;
+margin:0;
+}
+
+.box{
+max-width:1000px;
+margin:40px auto;
+background:#fff;
+padding:20px;
+border-radius:10px;
+}
+
+img{
+width:100%;
+max-height:400px;
+object-fit:contain;
+}
+
+button{
+padding:15px 25px;
+background:#ff2e88;
+color:#fff;
+border:none;
+border-radius:8px;
+font-size:16px;
+margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box" id="urun"></div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const urunID = params.get("id");
+
+fetch("products.json")
+.then(res=>res.json())
+.then(data=>{
+
+const urun = data.find(p => p.id == urunID);
+
+document.getElementById("urun").innerHTML = `
+<img src="${urun.resim}">
+<h2>${urun.ad}</h2>
+<h3>${urun.fiyat} TL</h3>
+<p>${urun.aciklama || ""}</p>
+<button onclick="addToCart(${urun.id})">Sepete Ekle</button>
+`;
+
+});
+</script>
+<script>
+function addToCart(id){
+
+fetch("products.json")
+.then(r=>r.json())
+.then(data=>{
+
+const urun = data.find(u => u.id == id);
+
+let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+const mevcut = cart.find(i => i.id == id);
+
+if(mevcut){
+  mevcut.adet += 1;
+}else{
+  cart.push({
+    id: urun.id,
+    ad: urun.ad,
+    fiyat: urun.fiyat,
+    resim: urun.resim,
+    adet: 1
+  });
+}
+
+localStorage.setItem("cart", JSON.stringify(cart));
+alert("Sepete eklendi");
+});
+}
+</script>
+</body>
+</html>
