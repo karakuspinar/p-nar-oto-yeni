@@ -45,12 +45,14 @@ select{padding:10px;border-radius:20px;border:1px solid #ddd;min-width:150px;fle
 
 <script>
 function applyFilter(){
+
   const brand = document.getElementById("brand").value;
   const model = document.getElementById("model").value;
   const year  = document.getElementById("year").value;
 
+  // direkt query ile gönderiyoruz
   window.location.href =
-    "kategori.html?brand=" + encodeURIComponent(brand) +
+    "category.html?brand=" + encodeURIComponent(brand) +
     "&model=" + encodeURIComponent(model) +
     "&year=" + encodeURIComponent(year);
 }
@@ -59,8 +61,5 @@ function clearFilter(){
   window.location.href = "index.html";
 }
 </script>
-
-<script src="js/araba-veri.js"></script>
-<script src="js/araba-ui.js"></script>
 </body>
 </html>
